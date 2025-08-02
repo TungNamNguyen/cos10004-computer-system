@@ -1,0 +1,60 @@
+      mov r0, #15
+Loop:
+      str r0 ,.WriteSignedNum
+      mov r1 ,#dp1
+      str r1 ,.WriteString
+      mov r2, #dp2
+      B Loop2
+select:
+      str r0 ,.WriteSignedNum
+      mov r1 ,#dp1
+      str r1, .WriteString
+      mov r7 , #dp4
+      str r7 , .WriteString
+select_again:
+      LDR R6, .Random
+      AND R6, R6, #3
+      CMP R6, #0
+      BGT select2
+      B select_again
+select2:
+      CMP R6 , R0
+      BGT select
+      SUB R0 , R0 , R6
+      CMP R0, #0
+      BEQ prompt1
+      BGT Loop
+prompt1:
+      mov r12, #dp5
+      str r12, .WriteString
+      halt
+prompt2:
+      mov r12, #dp6
+      str r12, .WriteString
+      halt
+Loop2:
+      str r2, .WriteString
+      mov r3, #num
+      ldr r3, .InputNum
+      cmp r3 , #1
+      blt Loop2
+      b condition1
+condition1:
+      cmp r3, #3
+      bgt Loop2
+      b condition2
+condition2:
+      sub r0 , r0 , r3
+      cmp r0 , #0
+      beq prompt2
+      bgt select
+      mov r5, #dp3
+      str r5, .WriteString
+      halt
+dp1:  .asciz "remaining\n"
+dp2:  .asciz "How many do you want to remove (1-3)?\n\n"
+dp3:  .asciz "There are none left!\n"
+dp4:  .asciz "___!!!It's computer's turn!!!___\n"
+dp5:  .asciz "\nYou Win!!! \n\n "
+dp6:  .asciz "\nYou Loose!!!\n\n"
+num:  .word 0
